@@ -59,7 +59,7 @@
             :id="getOptionId(option)" role="option"
             ref="options"
             :class="{ 'v-select__option--selected': isSelected(option) }"
-            @click="clickHandler(option)" :aria-selected="isSelected(option) ? 'true': 'false'"
+            @mousedown="clickHandler(option)" :aria-selected="isSelected(option) ? 'true': 'false'"
             )
             slot(
               name="option"
@@ -194,6 +194,9 @@ export default {
     })
   },
   methods: {
+    onButtonClick() {
+      this.toggle()
+    },
     toggle() {
       this.open = !this.open
     },
