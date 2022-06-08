@@ -245,9 +245,12 @@ export default {
             this.emit(this.options[currentOptionIndex + 1].value)
           return
         case KEY_RETURN:
+          console.log('RETURN 1')
           if (!this.open) return
+          console.log('RETURN 2')
 
           setTimeout(() => {
+            console.log('RETURN 3')
             this.open = false
             this.$refs.button.focus()
           }, 0)
