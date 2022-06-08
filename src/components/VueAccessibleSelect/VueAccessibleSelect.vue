@@ -266,7 +266,7 @@ export default {
           return
         case KEY_RETURN:
           this.open = false
-          this.$refs.button.focus()
+          // this.$refs.button.focus()
           return
       }
 
