@@ -14,9 +14,9 @@
       :aria-labelledby="`${labelId ? labelId : ''} ${buttonId}`"
       type="button"
       aria-haspopup="listbox"
-      @click="toggle"
+      @mousedown="toggle"
+      @keydown="buttonKeydownHandler"
       @blur="buttonBlurHandler"
-      @keydown="keydownHandler"
       )
       span.v-select__prepend(v-if="hasSlot('prepend')")
         slot(name="prepend")
@@ -48,7 +48,8 @@
           :aria-labelledby="labelId"
           role="listbox"
           tabindex="-1"
-          @keydown="keydownHandler"
+          @keydown="itemKeydownHandler"
+          @keypress.enter="enterHandler"
           @keyup.end="setLastSelected"
           @keyup.home="setFirstSelected"
           @keyup.esc="escapeHandler"
@@ -59,7 +60,7 @@
             :id="getOptionId(option)" role="option"
             ref="options"
             :class="{ 'v-select__option--selected': isSelected(option) }"
-            @click="clickHandler(option)" :aria-selected="isSelected(option) ? 'true': 'false'"
+            @mousedown="clickHandler(option)" :aria-selected="isSelected(option) ? 'true': 'false'"
             )
             slot(
               name="option"
@@ -76,12 +77,12 @@
 <script>
 import {
   KEY_RETURN,
-  KEY_ESCAPE,
   KEY_SPACE,
   KEY_LEFT,
   KEY_UP,
   KEY_RIGHT,
   KEY_DOWN,
+  KEY_ESCAPE,
 } from 'keycode-js'
 
 import config from '../../config'
@@ -217,12 +218,20 @@ export default {
       this.emit(option.value)
       this.open = false
     },
-    keydownHandler(e) {
+    buttonKeydownHandler(e) {
+      if ([KEY_SPACE, KEY_RETURN].indexOf(e.keyCode) === -1) {
+        return
+      }
+
+      e.preventDefault()
+      this.toggle()
+    },
+    itemKeydownHandler(e) {
       if (e.keyCode === KEY_ESCAPE) {
         return
       }
-      // prevent from default scrolling
 
+      // prevent from default scrolling
       if (
         [KEY_SPACE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN].indexOf(e.keyCode) >
         -1
@@ -230,12 +239,9 @@ export default {
         e.preventDefault()
       }
 
-      const { currentOptionIndex, open } = this
+      const { currentOptionIndex } = this
 
       switch (e.keyCode) {
-        case KEY_SPACE:
-          this.open = true
-          break
         case KEY_UP:
           if (currentOptionIndex !== 0)
             this.emit(this.options[currentOptionIndex - 1].value)
@@ -244,17 +250,13 @@ export default {
           if (currentOptionIndex !== this.options.length - 1)
             this.emit(this.options[currentOptionIndex + 1].value)
           return
-        case KEY_RETURN:
-          if (!this.open) return
-
-          setTimeout(() => {
-            this.open = false
-            this.$refs.button.focus()
-          }, 0)
-          return
       }
 
       this.printHandler(e)
+    },
+    enterHandler() {
+      this.open = false
+      this.$refs.button.focus()
     },
     getOptionId(option) {
       return `v-select-option-${this.options.indexOf(option)}_${this.localId_}`
