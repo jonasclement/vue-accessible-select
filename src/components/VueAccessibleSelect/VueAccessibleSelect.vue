@@ -237,7 +237,7 @@ export default {
       this.emit(option.value)
       this.open = false
     },
-    keydownHandler(e) {
+    async keydownHandler(e) {
       if (e.keyCode === KEY_ESCAPE) {
         return
       }
@@ -266,7 +266,7 @@ export default {
           return
         case KEY_RETURN:
           this.open = false
-          // this.$refs.button.focus()
+          document.activeElement = this.$refs.button
           return
       }
 
