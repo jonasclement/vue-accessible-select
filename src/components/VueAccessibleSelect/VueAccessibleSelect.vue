@@ -49,6 +49,7 @@
           role="listbox"
           tabindex="-1"
           @keydown="itemKeydownHandler"
+          @keypress.enter="enterHandler"
           @keyup.end="setLastSelected"
           @keyup.home="setFirstSelected"
           @keyup.esc="escapeHandler"
@@ -250,13 +251,13 @@ export default {
           if (currentOptionIndex !== this.options.length - 1)
             this.emit(this.options[currentOptionIndex + 1].value)
           return
-        case KEY_RETURN:
-          this.open = false
-          this.$refs.button.focus()
-          return
       }
 
       this.printHandler(e)
+    },
+    enterHandler() {
+      this.open = false
+      this.$refs.button.focus()
     },
     getOptionId(option) {
       return `v-select-option-${this.options.indexOf(option)}_${this.localId_}`
