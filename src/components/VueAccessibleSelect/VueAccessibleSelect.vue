@@ -194,7 +194,7 @@ export default {
     })
   },
   methods: {
-    toggle(e) {
+    toggle() {
       this.open = !this.open
     },
     emit(val) {
