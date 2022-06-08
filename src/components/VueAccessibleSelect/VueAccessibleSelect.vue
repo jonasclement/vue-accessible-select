@@ -48,10 +48,10 @@
           :aria-labelledby="labelId"
           role="listbox"
           tabindex="-1"
-          @keydown="itemKeydownHandler"
-          @keyup.end="setLastSelected"
-          @keyup.home="setFirstSelected"
-          @keyup.esc="escapeHandler"
+          @keyup="itemKeyupHandler"
+          @keydown.end="setLastSelected"
+          @keydown.home="setFirstSelected"
+          @keydown.esc="escapeHandler"
           @blur="menuBlurHandler"
           )
           li.v-select__option(
@@ -226,7 +226,7 @@ export default {
       e.preventDefault()
       this.toggle()
     },
-    itemKeydownHandler(e) {
+    itemKeyupHandler(e) {
       if (e.keyCode === KEY_ESCAPE) {
         return
       }
