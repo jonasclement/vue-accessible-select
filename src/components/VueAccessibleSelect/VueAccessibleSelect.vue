@@ -52,7 +52,7 @@
           @keyup.end="setLastSelected"
           @keyup.home="setFirstSelected"
           @keyup.esc="escapeHandler"
-          @keyup.enter="enterHandler"
+          @keyup.enter.stop="enterHandler"
           @blur="menuBlurHandler"
           )
           li.v-select__option(
@@ -248,8 +248,6 @@ export default {
             this.emit(this.options[currentOptionIndex + 1].value)
           return
         case KEY_RETURN:
-          if (!this.open) return
-
           this.open = false
           return
       }
