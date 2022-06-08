@@ -150,7 +150,6 @@ export default {
   },
   watch: {
     open(val) {
-      console.log('isopen', val)
       if (val) {
         setTimeout(() => {
           document.addEventListener('click', this.clickListener)
