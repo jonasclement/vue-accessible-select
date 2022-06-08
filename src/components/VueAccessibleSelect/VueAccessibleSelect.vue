@@ -194,26 +194,7 @@ export default {
     })
   },
   methods: {
-    isEnter(e) {
-      // Chromium uses a pointer event, making this easy
-      if (e.pointerType && e.pointerType === '') {
-        return true
-      }
-
-      // Firefox uses a click event, which doesn't contain pointer type
-      if (e.x === 0 && e.y === 0) {
-        return true
-      }
-
-      // Assume mouse
-      return false
-    },
     toggle(e) {
-      if (this.isEnter(e) && this.open) {
-        this.open = false
-        return
-      }
-
       this.open = !this.open
     },
     emit(val) {
