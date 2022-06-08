@@ -52,7 +52,6 @@
           @keyup.end="setLastSelected"
           @keyup.home="setFirstSelected"
           @keyup.esc="escapeHandler"
-          @keyup.enter.stop="enterHandler"
           @blur="menuBlurHandler"
           )
           li.v-select__option(
@@ -210,7 +209,7 @@ export default {
       return false
     },
     toggle(e) {
-      if (this.isEnter(e)) {
+      if (this.isEnter(e) && this.open) {
         this.open = false
         return
       }
@@ -267,6 +266,7 @@ export default {
           return
         case KEY_RETURN:
           this.open = false
+          this.$refs.button.focus()
           return
       }
 
@@ -283,13 +283,6 @@ export default {
     },
     escapeHandler() {
       this.open = false
-      this.$refs.button.focus()
-    },
-    async enterHandler() {
-      await this.$nextTick()
-      if (!this.open) return
-
-      console.log('enterhandler')
       this.$refs.button.focus()
     },
     printHandler(e) {
