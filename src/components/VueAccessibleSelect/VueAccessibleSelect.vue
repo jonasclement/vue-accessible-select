@@ -14,9 +14,9 @@
       :aria-labelledby="`${labelId ? labelId : ''} ${buttonId}`"
       type="button"
       aria-haspopup="listbox"
-      @click="toggle"
-      @blur="buttonBlurHandler"
+      @mousedown="toggle"
       @keydown="buttonKeydownHandler"
+      @blur="buttonBlurHandler"
       )
       span.v-select__prepend(v-if="hasSlot('prepend')")
         slot(name="prepend")
