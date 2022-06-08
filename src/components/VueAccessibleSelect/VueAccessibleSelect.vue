@@ -249,13 +249,10 @@ export default {
         case KEY_RETURN:
           console.log('RETURN 1')
           if (!this.open) return
-          console.log('RETURN 2')
 
-          setTimeout(() => {
-            console.log('RETURN 3')
-            this.open = false
-            this.$refs.button.focus()
-          }, 0)
+          console.log('RETURN 2')
+          this.open = false
+          this.$nextTick(() => this.$refs.button.focus())
           return
       }
 
