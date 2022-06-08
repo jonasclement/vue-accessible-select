@@ -16,7 +16,7 @@
       aria-haspopup="listbox"
       @click="toggle"
       @blur="buttonBlurHandler"
-      @keydown="keydownHandler"
+      @keydown="buttonKeydownHandler"
       )
       span.v-select__prepend(v-if="hasSlot('prepend')")
         slot(name="prepend")
@@ -48,7 +48,7 @@
           :aria-labelledby="labelId"
           role="listbox"
           tabindex="-1"
-          @keydown="keydownHandler"
+          @keydown="itemKeydownHandler"
           @keyup.end="setLastSelected"
           @keyup.home="setFirstSelected"
           @keyup.esc="escapeHandler"
@@ -76,12 +76,12 @@
 <script>
 import {
   KEY_RETURN,
-  KEY_ESCAPE,
   KEY_SPACE,
   KEY_LEFT,
   KEY_UP,
   KEY_RIGHT,
   KEY_DOWN,
+  KEY_ESCAPE,
 } from 'keycode-js'
 
 import config from '../../config'
@@ -237,12 +237,20 @@ export default {
       this.emit(option.value)
       this.open = false
     },
-    async keydownHandler(e) {
+    buttonKeydownHandler(e) {
+      if ([KEY_SPACE, KEY_RETURN].indexOf(e.keyCode) === -1) {
+        return
+      }
+
+      e.preventDefault()
+      this.toggle()
+    },
+    itemKeydownHandler(e) {
       if (e.keyCode === KEY_ESCAPE) {
         return
       }
-      // prevent from default scrolling
 
+      // prevent from default scrolling
       if (
         [KEY_SPACE, KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN].indexOf(e.keyCode) >
         -1
@@ -250,12 +258,9 @@ export default {
         e.preventDefault()
       }
 
-      const { currentOptionIndex, open } = this
+      const { currentOptionIndex } = this
 
       switch (e.keyCode) {
-        case KEY_SPACE:
-          this.open = true
-          break
         case KEY_UP:
           if (currentOptionIndex !== 0)
             this.emit(this.options[currentOptionIndex - 1].value)
@@ -266,7 +271,7 @@ export default {
           return
         case KEY_RETURN:
           this.open = false
-          document.activeElement = this.$refs.button
+          this.$refs.button.focus()
           return
       }
 
