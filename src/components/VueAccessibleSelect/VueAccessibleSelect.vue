@@ -273,6 +273,7 @@ export default {
       await this.$nextTick()
       if (!this.open) return
 
+      console.log('enterhandler')
       this.$refs.button.focus()
     },
     printHandler(e) {
