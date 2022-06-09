@@ -217,7 +217,7 @@ export default {
       this.emit(option.value)
       this.open = false
     },
-    keydownHandler(e) {
+    async keydownHandler(e) {
       // ESC is handled by escapeHandler()
       if (e.keyCode === KEY_ESCAPE) {
         return
@@ -246,9 +246,9 @@ export default {
             this.emit(this.options[currentOptionIndex + 1].value)
           return
         case KEY_RETURN:
-          if (!this.open) return
-          this.open = false
-          this.$refs.button.focus()
+          this.toggle()
+          await this.$nextTick()
+          if (!this.open) this.$refs.button.focus()
       }
 
       this.printHandler(e)
