@@ -15,7 +15,7 @@
       type="button"
       aria-haspopup="listbox"
       @mousedown="toggle"
-      @keydown="buttonKeydownHandler"
+      @keydown="keydownHandler"
       @blur="buttonBlurHandler"
       )
       span.v-select__prepend(v-if="hasSlot('prepend')")
@@ -48,8 +48,7 @@
           :aria-labelledby="labelId"
           role="listbox"
           tabindex="-1"
-          @keydown="itemKeydownHandler"
-          @keypress.enter="enterHandler"
+          @keydown="keydownHandler"
           @keyup.end="setLastSelected"
           @keyup.home="setFirstSelected"
           @keyup.esc="escapeHandler"
@@ -218,15 +217,8 @@ export default {
       this.emit(option.value)
       this.open = false
     },
-    buttonKeydownHandler(e) {
-      if ([KEY_SPACE, KEY_RETURN].indexOf(e.keyCode) === -1) {
-        return
-      }
-
-      e.preventDefault()
-      this.toggle()
-    },
-    itemKeydownHandler(e) {
+    keydownHandler(e) {
+      // ESC is handled by escapeHandler()
       if (e.keyCode === KEY_ESCAPE) {
         return
       }
@@ -242,6 +234,9 @@ export default {
       const { currentOptionIndex } = this
 
       switch (e.keyCode) {
+        case KEY_SPACE:
+          this.open = true
+          break
         case KEY_UP:
           if (currentOptionIndex !== 0)
             this.emit(this.options[currentOptionIndex - 1].value)
@@ -250,13 +245,13 @@ export default {
           if (currentOptionIndex !== this.options.length - 1)
             this.emit(this.options[currentOptionIndex + 1].value)
           return
+        case KEY_ENTER:
+          if (!this.open) return
+          this.open = false
+          this.$refs.button.focus()
       }
 
       this.printHandler(e)
-    },
-    enterHandler() {
-      this.open = false
-      this.$refs.button.focus()
     },
     getOptionId(option) {
       return `v-select-option-${this.options.indexOf(option)}_${this.localId_}`
