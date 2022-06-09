@@ -283,14 +283,15 @@ export default {
     },
     selectByText(text) {
       for (let option of this.shiftOptions(this.currentOptionIndex)) {
-        if (String(option.label).toUpperCase().startsWith(text)) {
-          const currentOption = this.$refs.options[this.currentOptionIndex]
+        if (!String(option.label).toUpperCase().startsWith(text)) continue
 
-          console.log(currentOption?.value, option.value)
-          if (currentOption?.value === option.value) return
-
+        if (!this.currentOption) {
           this.emit(option.value)
+          return
+        }
 
+        if (this.currentOption.value !== option.value) {
+          this.emit(option.value)
           return
         }
       }
