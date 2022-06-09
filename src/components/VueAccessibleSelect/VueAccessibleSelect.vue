@@ -245,7 +245,7 @@ export default {
           if (currentOptionIndex !== this.options.length - 1)
             this.emit(this.options[currentOptionIndex + 1].value)
           return
-        case KEY_ENTER:
+        case KEY_RETURN:
           if (!this.open) return
           this.open = false
           this.$refs.button.focus()
