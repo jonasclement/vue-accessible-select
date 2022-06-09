@@ -285,12 +285,9 @@ export default {
       for (let option of this.shiftOptions(this.currentOptionIndex)) {
         if (String(option.label).toUpperCase().startsWith(text)) {
           const currentOption = this.$refs.options[this.currentOptionIndex]
-          if (!currentOption) {
-            this.emit(option.value)
-            return
-          }
 
-          if (currentOption.value === option.value) return
+          console.log(currentOption?.value, option.value)
+          if (currentOption?.value === option.value) return
 
           this.emit(option.value)
 
